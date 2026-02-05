@@ -171,6 +171,13 @@ button {
   padding: 16mm 8mm 12mm;
 }
 
+.cover-school,
+.cover-footer {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+}
+
 .cover-title {
   font-size: 2rem;
   margin: 0 0 8mm;
@@ -204,6 +211,14 @@ button {
 .cover-footer-sub {
   margin: 0;
   font-size: 0.98rem;
+}
+
+  margin: 8mm 0 10mm;
+}
+
+.cover-meta p {
+  margin: 4px 0;
+  font-size: 1.05rem;
 }
 
 .report-figure {

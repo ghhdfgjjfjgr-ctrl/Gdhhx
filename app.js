@@ -71,17 +71,20 @@ function buildCoverContent(data) {
       <h2 class="cover-title">รายงาน</h2>
       <h1 class="cover-topic">เรื่อง ${title}</h1>
 
-      <div class="cover-meta">
-        <p><strong>ผู้จัดทำ</strong> ${student}</p>
-        <p><strong>นักเรียนชั้น</strong> ${classroom}</p>
-        <p><strong>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</strong> ${faculty}</p>
-        <p><strong>ภาคเรียนที่</strong> ${semester}</p>
-      </div>
-
+    
       <div class="cover-footer-wrap">
         <p class="cover-footer">โรงเรียนสมเด็จพระธีรญาณมุนี</p>
-        <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาจังหวัดนครราชสีมา</p>
+        <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศ
+        <p>จัดทำโดย ${student}</p>
+        <p>ชั้น ${classroom}</p>
+        <p>เสนอ</p>
+        <p>${teacher}</p>
+        <p>รายวิชา ${subject}</p>
+        <p>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา ${faculty}</p>
+        <p>${semester}</p>
       </div>
+
+      <p class="cover-footer">${school}</p>
     </article>
   `;
 }
@@ -307,6 +310,7 @@ async function exportPdf() {
     reportPages.style.maxWidth = prevMaxWidth;
     document.body.classList.remove('exporting-pdf');
   }
+  
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);
