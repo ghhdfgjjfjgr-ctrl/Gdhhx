@@ -165,9 +165,10 @@ button {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 8mm 4mm;
+  padding: 16mm 8mm 12mm;
 }
 
 .cover-school,
@@ -179,11 +180,39 @@ button {
 
 .cover-title {
   font-size: 2rem;
-  margin: 12mm 0 0;
+  margin: 0 0 8mm;
 }
 
 .cover-topic {
   font-size: 1.5rem;
+  margin: 0 0 16mm;
+}
+
+.cover-meta {
+  width: 100%;
+  max-width: 150mm;
+}
+
+.cover-meta p {
+  margin: 5px 0;
+  font-size: 1.05rem;
+}
+
+.cover-footer-wrap {
+  margin-top: 20mm;
+}
+
+.cover-footer {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.cover-footer-sub {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
   margin: 8mm 0 10mm;
 }
 
@@ -413,12 +442,16 @@ button {
 
   .cover-title {
     font-size: 14px;
-    margin-top: 6px;
+    margin: 0 0 4px;
   }
 
   .cover-topic {
     font-size: 12px;
-    margin: 4px 0 8px;
+    margin: 0 0 8px;
+  }
+
+  .cover-footer-sub {
+    font-size: 8px;
   }
 
   .cover-meta p,
@@ -458,3 +491,77 @@ button {
   }
 }
 
+
+
+body.exporting-pdf .report-preview {
+  background: #fff !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+body.exporting-pdf .report-pages {
+  gap: 0 !important;
+}
+
+body.exporting-pdf .a4-page {
+  width: 210mm !important;
+  min-height: 297mm !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.exporting-pdf .a4-page-content {
+  height: 297mm !important;
+  min-height: 297mm !important;
+  padding: 18mm 16mm !important;
+}
+
+body.exporting-pdf .page-header-number {
+  font-size: 14px !important;
+}
+
+body.exporting-pdf .report-section-title {
+  font-size: 1.2rem !important;
+  margin: 18px 0 10px !important;
+}
+
+body.exporting-pdf .report-paragraph,
+body.exporting-pdf .toc-subtitle,
+body.exporting-pdf .toc-label,
+body.exporting-pdf .toc-page,
+body.exporting-pdf .report-figure figcaption,
+body.exporting-pdf .proscons-card,
+body.exporting-pdf .proscons-card h4,
+body.exporting-pdf .cover-meta p {
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+body.exporting-pdf .cover-footer-sub {
+  font-size: 0.98rem !important;
+}
+
+body.exporting-pdf .report-figure img {
+  height: 180px !important;
+}
+
+@media print {
+  body { background: #fff; }
+  .app { max-width: none; padding: 0; }
+  header, .form-grid, .actions, .checkbox-grid, h2, label, input, select { display: none !important; }
+  .card { border: none; padding: 0; margin: 0; }
+  .report-preview {
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+  }
+  .report-pages { gap: 0; }
+  .a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    box-shadow: none;
+    border: none;
+    margin: 0;
+  }
+}

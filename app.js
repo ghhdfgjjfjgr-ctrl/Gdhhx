@@ -68,11 +68,20 @@ function buildCoverContent(data) {
 
   return `
     <article class="cover-sheet">
-      <p class="cover-school">${school}</p>
       <h2 class="cover-title">รายงาน</h2>
       <h1 class="cover-topic">เรื่อง ${title}</h1>
 
       <div class="cover-meta">
+        <p><strong>ผู้จัดทำ</strong> ${student}</p>
+        <p><strong>นักเรียนชั้น</strong> ${classroom}</p>
+        <p><strong>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</strong> ${faculty}</p>
+        <p><strong>ภาคเรียนที่</strong> ${semester}</p>
+      </div>
+
+      <div class="cover-footer-wrap">
+        <p class="cover-footer">โรงเรียนสมเด็จพระธีรญาณมุนี</p>
+        <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาจังหวัดนครราชสีมา</p>
+      </div>
         <p>จัดทำโดย ${student}</p>
         <p>ชั้น ${classroom}</p>
         <p>เสนอ</p>
@@ -276,16 +285,19 @@ async function exportPdf() {
   if (preview.querySelector('.placeholder')) buildReport();
 
   const title = getInputValue('title', 'thai-report');
+  const reportPages = preview.querySelector('.report-pages') || preview;
   const options = {
     margin: [0, 0, 0, 0],
     filename: `${title.replace(/\s+/g, '_')}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
-  await html2pdf().set(options).from(preview).save();
+  document.body.classList.add('exporting-pdf');
+  try {
+    await html2pdf().set(options).from(reportPages).save();
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);
