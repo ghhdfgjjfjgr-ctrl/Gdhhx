@@ -82,6 +82,16 @@ function buildCoverContent(data) {
         <p class="cover-footer">โรงเรียนสมเด็จพระธีรญาณมุนี</p>
         <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาจังหวัดนครราชสีมา</p>
       </div>
+        <p>จัดทำโดย ${student}</p>
+        <p>ชั้น ${classroom}</p>
+        <p>เสนอ</p>
+        <p>${teacher}</p>
+        <p>รายวิชา ${subject}</p>
+        <p>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา ${faculty}</p>
+        <p>${semester}</p>
+      </div>
+
+      <p class="cover-footer">${school}</p>
     </article>
   `;
 }
@@ -288,9 +298,6 @@ async function exportPdf() {
   document.body.classList.add('exporting-pdf');
   try {
     await html2pdf().set(options).from(reportPages).save();
-  } finally {
-    document.body.classList.remove('exporting-pdf');
-  }
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);
