@@ -71,17 +71,10 @@ function buildCoverContent(data) {
       <h2 class="cover-title">รายงาน</h2>
       <h1 class="cover-topic">เรื่อง ${title}</h1>
 
-      <div class="cover-meta">
-        <p><strong>ผู้จัดทำ</strong> ${student}</p>
-        <p><strong>นักเรียนชั้น</strong> ${classroom}</p>
-        <p><strong>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</strong> ${faculty}</p>
-        <p><strong>ภาคเรียนที่</strong> ${semester}</p>
-      </div>
-
+    
       <div class="cover-footer-wrap">
         <p class="cover-footer">โรงเรียนสมเด็จพระธีรญาณมุนี</p>
-        <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาจังหวัดนครราชสีมา</p>
-      </div>
+        <p class="cover-footer-sub">สังกัดสำนักงานเขตพื้นที่การศ
         <p>จัดทำโดย ${student}</p>
         <p>ชั้น ${classroom}</p>
         <p>เสนอ</p>
@@ -290,14 +283,34 @@ async function exportPdf() {
     margin: [0, 0, 0, 0],
     filename: `${title.replace(/\s+/g, '_')}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      windowWidth: 1400,
+      windowHeight: 2000,
+      scrollX: 0,
+      scrollY: 0
+    },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
   document.body.classList.add('exporting-pdf');
+  const prevWidth = reportPages.style.width;
+  const prevMaxWidth = reportPages.style.maxWidth;
+  reportPages.style.width = '210mm';
+  reportPages.style.maxWidth = '210mm';
+
   try {
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     await html2pdf().set(options).from(reportPages).save();
+  } finally {
+    reportPages.style.width = prevWidth;
+    reportPages.style.maxWidth = prevMaxWidth;
+    document.body.classList.remove('exporting-pdf');
+  }
+  
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);

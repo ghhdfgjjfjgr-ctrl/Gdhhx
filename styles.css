@@ -503,6 +503,29 @@ body.exporting-pdf .report-pages {
   gap: 0 !important;
 }
 
+body.exporting-pdf .report-pages {
+  justify-content: flex-start !important;
+  width: 210mm !important;
+  max-width: 210mm !important;
+}
+
+body.exporting-pdf .a4-page {
+  max-width: 210mm !important;
+  margin: 0 !important;
+}
+
+body.exporting-pdf .a4-page-content {
+  overflow: hidden !important;
+}
+
+body.exporting-pdf .cover-title {
+  font-size: 2rem !important;
+}
+
+body.exporting-pdf .cover-topic {
+  font-size: 1.5rem !important;
+}
+
 body.exporting-pdf .a4-page {
   width: 210mm !important;
   min-height: 297mm !important;
