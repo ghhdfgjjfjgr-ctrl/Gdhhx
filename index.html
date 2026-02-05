@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI ผู้ช่วยจัดทำรายงานภาษาไทย</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>AI ผู้ช่วยจัดทำรายงานภาษาไทย</h1>
+        <p>เลือกองค์ประกอบรายงาน ตั้งค่าย่อหน้า/เว้นวรรค ระบุโรงเรียนและคณะ แล้วสร้างไฟล์ PDF ได้ทันที</p>
+      </header>
+
+      <section class="card form-grid">
+        <div>
+          <label for="title">ชื่อรายงาน</label>
+          <input id="title" type="text" placeholder="เช่น รายงานเรื่องพลังงานทดแทน" />
+        </div>
+        <div>
+          <label for="school">ชื่อโรงเรียน / สถาบัน</label>
+          <input id="school" type="text" placeholder="เช่น โรงเรียนตัวอย่างวิทยา" />
+        </div>
+        <div>
+          <label for="faculty">รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</label>
+          <input id="faculty" type="text" placeholder="เช่น วิทยาศาสตร์และเทคโนโลยี" />
+        </div>
+        <div>
+          <label for="student">ชื่อผู้จัดทำ</label>
+          <input id="student" type="text" placeholder="เช่น นายสมชาย ใจดี" />
+        </div>
+        <div>
+          <label for="classroom">ชั้น / ห้อง</label>
+          <input id="classroom" type="text" placeholder="เช่น ม.5/2" />
+        </div>
+        <div>
+          <label for="subject">รายวิชา</label>
+          <input id="subject" type="text" placeholder="เช่น ภาษาไทยพื้นฐาน" />
+        </div>
+        <div>
+          <label for="teacher">ครูผู้สอน</label>
+          <input id="teacher" type="text" placeholder="เช่น ครูสุภาพร ใจงาม" />
+        </div>
+        <div>
+          <label for="semester">ภาคเรียน / ปีการศึกษา</label>
+          <input id="semester" type="text" placeholder="เช่น ภาคเรียนที่ 2 ปีการศึกษา 2568" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>องค์ประกอบรายงานมาตรฐานไทย</h2>
+        <div class="checkbox-grid" id="sectionsContainer"></div>
+      </section>
+
+      <section class="card form-grid compact">
+        <div>
+          <label for="paragraphIndent">ย่อหน้าแรก (เว้นระยะ)</label>
+          <select id="paragraphIndent">
+            <option value="2em">2 ตัวอักษร (มาตรฐาน)</option>
+            <option value="1.5em">1.5 ตัวอักษร</option>
+            <option value="2.5em">2.5 ตัวอักษร</option>
+          </select>
+        </div>
+        <div>
+          <label for="lineSpacing">ระยะบรรทัด</label>
+          <select id="lineSpacing">
+            <option value="1.6">1.6 (แนะนำ)</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2.0</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button id="generateBtn" class="primary">จัดโครงรายงานด้วย AI</button>
+        <button id="toggleEditBtn" class="edit">เปิดโหมดแก้ไข</button>
+        <button id="downloadBtn" class="secondary">ดาวน์โหลดเป็น PDF</button>
+      </section>
+
+      <p class="edit-hint">หลังสร้างรายงานแล้วสามารถกด “เปิดโหมดแก้ไข” เพื่อคลิกแก้ข้อความในรายงานได้ทันที</p>
+
+      <section class="card report-wrapper">
+        <div id="reportPreview" class="report-preview">
+          <p class="placeholder">กรอกข้อมูลแล้วกด “จัดโครงรายงานด้วย AI” เพื่อดูตัวอย่างรายงาน</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
