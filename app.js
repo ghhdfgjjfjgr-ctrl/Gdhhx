@@ -382,7 +382,7 @@ async function buildExportHtml() {
   `;
 }
 
-async function exportPdfPrince() {
+async function exportPdfServer() {
   if (preview.querySelector('.placeholder')) buildReport();
 
   const title = getInputValue('title', 'thai-report');
@@ -395,7 +395,7 @@ async function exportPdfPrince() {
 
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message || 'ไม่สามารถสร้าง PDF ด้วย PrinceXML ได้');
+    throw new Error(message || 'ไม่สามารถสร้าง PDF ผ่านเซิร์ฟเวอร์ได้');
   }
 
   const blob = await response.blob();
@@ -409,28 +409,32 @@ async function exportPdfPrince() {
   URL.revokeObjectURL(url);
 }
 
-async function checkPrinceAvailability() {
+async function checkServerPdfAvailability() {
   if (!downloadPrinceBtn) return;
   try {
-    const response = await fetch('/api/prince-status');
+    const response = await fetch('/api/pdf-status');
     if (!response.ok) throw new Error('status');
-    const { available } = await response.json();
+    const { available, engine } = await response.json();
     if (!available) {
       downloadPrinceBtn.disabled = true;
-      downloadPrinceBtn.textContent = 'PrinceXML ยังไม่พร้อมใช้งาน';
-      downloadPrinceBtn.title = 'ติดตั้ง PrinceXML บนเซิร์ฟเวอร์ก่อนใช้งาน';
+      downloadPrinceBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
+      downloadPrinceBtn.title = 'ติดตั้ง PrinceXML หรือ Playwright บนเซิร์ฟเวอร์ก่อนใช้งาน';
+      return;
     }
+    downloadPrinceBtn.disabled = false;
+    downloadPrinceBtn.textContent = `ดาวน์โหลดเป็น PDF (คุณภาพสูง: ${engine})`;
+    downloadPrinceBtn.title = `ส่งออกด้วย ${engine}`;
   } catch (error) {
     downloadPrinceBtn.disabled = true;
-    downloadPrinceBtn.textContent = 'PrinceXML ยังไม่พร้อมใช้งาน';
-    downloadPrinceBtn.title = 'เชื่อมต่อเซิร์ฟเวอร์ PrinceXML ไม่ได้';
+    downloadPrinceBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
+    downloadPrinceBtn.title = 'เชื่อมต่อเซิร์ฟเวอร์ PDF ไม่ได้';
   }
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);
 document.getElementById('downloadBtn').addEventListener('click', exportPdf);
 downloadPrinceBtn.addEventListener('click', () => {
-  exportPdfPrince().catch((error) => {
+  exportPdfServer().catch((error) => {
     alert(error.message);
   });
 });
@@ -440,4 +444,4 @@ toggleEditBtn.addEventListener('click', () => {
 });
 
 renderSectionSelector();
-checkPrinceAvailability();
+checkServerPdfAvailability();

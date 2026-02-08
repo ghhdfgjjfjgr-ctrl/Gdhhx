@@ -11,13 +11,45 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 
-app.get('/api/prince-status', async (_req, res) => {
+async function isPrinceAvailable() {
   try {
     await execFileAsync('prince', ['--version']);
-    res.json({ available: true });
+    return true;
   } catch (error) {
-    res.status(200).json({ available: false });
+    return false;
   }
+}
+
+async function isPlaywrightAvailable() {
+  let playwright;
+  try {
+    playwright = require('playwright');
+  } catch (error) {
+    return false;
+  }
+
+  const executablePath = playwright.chromium.executablePath();
+  try {
+    await fs.access(executablePath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function getPdfEngine() {
+  if (await isPrinceAvailable()) {
+    return 'PrinceXML';
+  }
+  if (await isPlaywrightAvailable()) {
+    return 'Playwright';
+  }
+  return null;
+}
+
+app.get('/api/pdf-status', async (_req, res) => {
+  const engine = await getPdfEngine();
+  res.json({ available: Boolean(engine), engine: engine || 'none' });
 });
 
 app.post('/api/export', async (req, res) => {
@@ -28,10 +60,9 @@ app.post('/api/export', async (req, res) => {
     return;
   }
 
-  try {
-    await execFileAsync('prince', ['--version']);
-  } catch (error) {
-    res.status(501).send('ยังไม่พบ PrinceXML บนเซิร์ฟเวอร์นี้');
+  const engine = await getPdfEngine();
+  if (!engine) {
+    res.status(501).send('ยังไม่พบเครื่องมือสร้าง PDF บนเซิร์ฟเวอร์นี้');
     return;
   }
 
@@ -41,13 +72,29 @@ app.post('/api/export', async (req, res) => {
 
   try {
     await fs.writeFile(htmlPath, html, 'utf8');
-    await execFileAsync('prince', [htmlPath, '-o', pdfPath]);
-    const pdfBuffer = await fs.readFile(pdfPath);
+    let pdfBuffer;
+    if (engine === 'PrinceXML') {
+      await execFileAsync('prince', [htmlPath, '-o', pdfPath]);
+      pdfBuffer = await fs.readFile(pdfPath);
+    } else {
+      const { chromium } = require('playwright');
+      const browser = await chromium.launch();
+      const page = await browser.newPage();
+      await page.setContent(html, { waitUntil: 'networkidle' });
+      await page.emulateMediaType('print');
+      pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '0', right: '0', bottom: '0', left: '0' },
+        preferCSSPageSize: true
+      });
+      await browser.close();
+    }
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename || 'report.pdf'}"`);
     res.send(pdfBuffer);
   } catch (error) {
-    res.status(500).send('ไม่สามารถสร้าง PDF ด้วย PrinceXML ได้');
+    res.status(500).send('ไม่สามารถสร้าง PDF ผ่านเซิร์ฟเวอร์ได้');
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
