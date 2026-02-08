@@ -1,26 +1,13 @@
 const express = require('express');
-const { execFile } = require('node:child_process');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
-const util = require('node:util');
-
-const execFileAsync = util.promisify(execFile);
 const app = express();
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 
-async function isPrinceAvailable() {
-  try {
-    await execFileAsync('prince', ['--version']);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-async function isPlaywrightAvailable() {
+async function isChromiumAvailable() {
   let playwright;
   try {
     playwright = require('playwright');
@@ -38,11 +25,8 @@ async function isPlaywrightAvailable() {
 }
 
 async function getPdfEngine() {
-  if (await isPrinceAvailable()) {
-    return 'PrinceXML';
-  }
-  if (await isPlaywrightAvailable()) {
-    return 'Playwright';
+  if (await isChromiumAvailable()) {
+    return 'Chromium';
   }
   return null;
 }
@@ -72,24 +56,18 @@ app.post('/api/export', async (req, res) => {
 
   try {
     await fs.writeFile(htmlPath, html, 'utf8');
-    let pdfBuffer;
-    if (engine === 'PrinceXML') {
-      await execFileAsync('prince', [htmlPath, '-o', pdfPath]);
-      pdfBuffer = await fs.readFile(pdfPath);
-    } else {
-      const { chromium } = require('playwright');
-      const browser = await chromium.launch();
-      const page = await browser.newPage();
-      await page.setContent(html, { waitUntil: 'networkidle' });
-      await page.emulateMediaType('print');
-      pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: { top: '0', right: '0', bottom: '0', left: '0' },
-        preferCSSPageSize: true
-      });
-      await browser.close();
-    }
+    const { chromium } = require('playwright');
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle' });
+    await page.emulateMediaType('print');
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      preferCSSPageSize: true
+    });
+    await browser.close();
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename || 'report.pdf'}"`);
     res.send(pdfBuffer);
