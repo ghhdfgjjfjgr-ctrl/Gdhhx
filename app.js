@@ -73,13 +73,13 @@ function buildCoverContent(data) {
   return `
     <article class="cover-sheet">
       <h2 class="cover-title">รายงาน</h2>
-      <h1 class="cover-topic">เรื่อง ${title}</h1>
+      <h1 class="cover-topic">รายงานเรื่อง ${title}</h1>
 
       <div class="cover-meta">
-        <p><strong>ผู้จัดทำ</strong> ${student}</p>
-        <p><strong>นักเรียนชั้น</strong> ${classroom}</p>
-        <p><strong>รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</strong> ${faculty}</p>
-        <p>${formatSemesterText(semester)}</p>
+        <p><span class="cover-label">ผู้จัดทำ</span> ${student}</p>
+        <p><span class="cover-label">นักเรียนชั้น</span> ${classroom}</p>
+        <p><span class="cover-label">รายงานฉบับนี้เป็นส่วนหนึ่งของรายวิชา</span> ${faculty}</p>
+        <p><span class="cover-label">ภาคเรียนที่</span> ${formatSemesterText(semester).replace("ภาคเรียนที่ ","")}</p>
       </div>
 
       <div class="cover-footer-wrap">

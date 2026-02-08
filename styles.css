@@ -173,17 +173,19 @@ button {
 
 .cover-title {
   font-size: 2rem;
-  margin: 0 0 8mm;
+  margin: 0 0 6mm;
+  letter-spacing: 0.5px;
 }
 
 .cover-topic {
-  font-size: 1.5rem;
-  margin: 0 0 16mm;
+  font-size: 1.4rem;
+  margin: 0 0 12mm;
 }
 
 .cover-meta {
   width: 100%;
   max-width: 150mm;
+  text-align: left;
 }
 
 .cover-meta p {
@@ -191,8 +193,15 @@ button {
   font-size: 1.05rem;
 }
 
+
+.cover-label {
+  display: inline-block;
+  min-width: 150px;
+  font-weight: 600;
+}
+
 .cover-footer-wrap {
-  margin-top: 20mm;
+  margin-top: 16mm;
 }
 
 .cover-footer {
@@ -439,6 +448,10 @@ button {
     font-size: 8px;
   }
 
+  .cover-label {
+    min-width: 90px;
+  }
+
   .cover-meta p,
   .report-section-title,
   .report-paragraph,
@@ -547,6 +560,10 @@ body.exporting-pdf .cover-meta p {
 
 body.exporting-pdf .cover-footer-sub {
   font-size: 0.98rem !important;
+}
+
+body.exporting-pdf .cover-label {
+  min-width: 150px !important;
 }
 
 body.exporting-pdf .report-figure img {
