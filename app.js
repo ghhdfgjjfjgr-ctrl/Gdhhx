@@ -17,7 +17,7 @@ const sectionTemplates = [
 const sectionsContainer = document.getElementById('sectionsContainer');
 const preview = document.getElementById('reportPreview');
 const toggleEditBtn = document.getElementById('toggleEditBtn');
-const downloadPrinceBtn = document.getElementById('downloadPrinceBtn');
+const downloadChromiumBtn = document.getElementById('downloadChromiumBtn');
 let isEditMode = false;
 
 function renderSectionSelector() {
@@ -410,30 +410,30 @@ async function exportPdfServer() {
 }
 
 async function checkServerPdfAvailability() {
-  if (!downloadPrinceBtn) return;
+  if (!downloadChromiumBtn) return;
   try {
     const response = await fetch('/api/pdf-status');
     if (!response.ok) throw new Error('status');
     const { available, engine } = await response.json();
     if (!available) {
-      downloadPrinceBtn.disabled = true;
-      downloadPrinceBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
-      downloadPrinceBtn.title = 'ติดตั้ง PrinceXML หรือ Playwright บนเซิร์ฟเวอร์ก่อนใช้งาน';
+      downloadChromiumBtn.disabled = true;
+      downloadChromiumBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
+      downloadChromiumBtn.title = 'ติดตั้ง Chromium ผ่าน Playwright บนเซิร์ฟเวอร์ก่อนใช้งาน';
       return;
     }
-    downloadPrinceBtn.disabled = false;
-    downloadPrinceBtn.textContent = `ดาวน์โหลดเป็น PDF (คุณภาพสูง: ${engine})`;
-    downloadPrinceBtn.title = `ส่งออกด้วย ${engine}`;
+    downloadChromiumBtn.disabled = false;
+    downloadChromiumBtn.textContent = `ดาวน์โหลดเป็น PDF (คุณภาพสูง: ${engine})`;
+    downloadChromiumBtn.title = `ส่งออกด้วย ${engine}`;
   } catch (error) {
-    downloadPrinceBtn.disabled = true;
-    downloadPrinceBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
-    downloadPrinceBtn.title = 'เชื่อมต่อเซิร์ฟเวอร์ PDF ไม่ได้';
+    downloadChromiumBtn.disabled = true;
+    downloadChromiumBtn.textContent = 'PDF คุณภาพสูงยังไม่พร้อมใช้งาน';
+    downloadChromiumBtn.title = 'เชื่อมต่อเซิร์ฟเวอร์ PDF ไม่ได้';
   }
 }
 
 document.getElementById('generateBtn').addEventListener('click', buildReport);
 document.getElementById('downloadBtn').addEventListener('click', exportPdf);
-downloadPrinceBtn.addEventListener('click', () => {
+downloadChromiumBtn.addEventListener('click', () => {
   exportPdfServer().catch((error) => {
     alert(error.message);
   });

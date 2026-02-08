@@ -2,7 +2,7 @@
   "name": "thai-report-ai",
   "version": "1.0.0",
   "private": true,
-  "description": "AI assistant for Thai report generation with optional PrinceXML PDF export.",
+  "description": "AI assistant for Thai report generation with optional Chromium Print to PDF export.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
